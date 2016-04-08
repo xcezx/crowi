@@ -25,6 +25,10 @@ cli.parse({
  *      "email@example.com",
  *      ...
  *    ],
+ *    "likeUsers": [
+ *      "email@example.com",
+ *      ...
+ *    ],
  *    "comments": [
  *      {
  *        "user": "email@example.com",
