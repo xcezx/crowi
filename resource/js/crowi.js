@@ -321,6 +321,35 @@ $(function() {
 
   if (pageId) {
 
+    // if page exists
+    var $rawTextOriginal = $('#raw-text-original');
+    if ($rawTextOriginal.length > 0) {
+      var renderer = new Crowi.renderer($('#raw-text-original').html());
+      renderer.render();
+      Crowi.correctHeaders('#revision-body-content');
+      Crowi.revisionToc('#revision-body-content', '#revision-toc');
+    }
+
+    // header
+    var $header = $('#page-header');
+    if ($header.length > 0) {
+      var headerHeight = $header.outerHeight(true);
+      $('.header-wrap').css({height: (headerHeight + 16) + 'px'});
+      $header.affix({
+        offset: {
+          top: function() {
+            return headerHeight + 86; // (54 header + 16 header padding-top + 16 content padding-top)
+          }
+        }
+      });
+      $('[data-affix-disable]').on('click', function(e) {
+        $elm = $($(this).data('affix-disable'));
+        $(window).off('.affix');
+        $elm.removeData('affix').removeClass('affix affix-top affix-bottom');
+        return false;
+      });
+    }
+
     // omg
     function createCommentHTML(revision, creator, comment, commentedAt) {
       var $comment = $('<div>');
@@ -549,7 +578,8 @@ $(function() {
 
     var $seenUserList = $("#seen-user-list");
     var seenUsers = $seenUserList.data('seen-users');
-    if (seenUsers && seenUsers.length > 0 && seenUsers.length <= 10) {
+    var seenUsersArray = seenUsers.split(',');
+    if (seenUsers && seenUsersArray.length > 0 && seenUsersArray.length <= 10) {
       // FIXME: user data cache
       $.get('/_api/users.list', {user_ids: seenUsers}, function(res) {
         // ignore unless response has error
