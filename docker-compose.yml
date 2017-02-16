@@ -1,0 +1,20 @@
+version: "2.1"
+
+services:
+  crowi:
+    image: crowi/crowi
+    environment:
+      NODE_ENV: "${NODE_ENV:-production}"
+      MONGO_URI: "mongodb://mongo/crowi"
+      # REDIS_URL:
+      # ELASTICSEARCH_URI:
+      PASSWORD_SEED: "${PASSWORD_SEED:-blahblahblah}"
+      # SECRET_TOKEN:
+      # FILE_UPLOAD:
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:3.4
